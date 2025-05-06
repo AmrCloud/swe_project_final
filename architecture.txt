@@ -1,0 +1,61 @@
+lib/
+├── core/
+│   ├── constants/
+│   │   ├── app_constants.dart
+│   │   └── route_names.dart
+│   ├── errors/
+│   │   ├── exceptions.dart
+│   │   └── failures.dart
+│   ├── network/
+│   │   ├── api_client.dart
+│   │   └── network_info.dart
+│   ├── services/
+│   │   ├── local_storage.dart (shared_pref.dart moved here)
+│   │   └── auth_service.dart
+│   ├── utils/
+│   │   ├── input_validator.dart
+│   │   └── snackbar_util.dart
+│   └── widgets/
+│       ├── custom_button.dart
+│       └── custom_textfield.dart
+├── features/
+│   ├── auth/
+│   │   ├── data/
+│   │   │   ├── datasources/
+│   │   │   │   └── auth_local_data_source.dart
+│   │   │   ├── models/
+│   │   │   │   └── user_model.dart
+│   │   │   └── repositories/
+│   │   │       └── auth_repository_impl.dart
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   │   └── user.dart
+│   │   │   ├── repositories/
+│   │   │   │   └── auth_repository.dart
+│   │   │   └── usecases/
+│   │   │       ├── login_user.dart
+│   │   │       └── register_user.dart
+│   │   └── presentation/
+│   │       ├── bloc/ (or cubit/)
+│   │       │   ├── auth_bloc.dart
+│   │       │   ├── auth_event.dart
+│   │       │   └── auth_state.dart
+│   │       ├── pages/
+│   │       │   ├── login_page.dart
+│   │       │   └── signup_page.dart
+│   │       └── widgets/
+│   │           └── auth_form.dart
+│   ├── home/
+│   │   └── presentation/
+│   │       └── pages/
+│   │           └── home_page.dart
+│   ├── profile/
+│   │   └── presentation/
+│   │       └── pages/
+│   │           └── profile_page.dart
+│   └── settings/
+│       └── presentation/
+│           └── pages/
+│               └── settings_page.dart
+├── app.dart
+└── main.dart
