@@ -5,10 +5,13 @@ import 'package:sugarsense/features/auth/domain/repositories/auth_repository.dar
 import 'core/constants/route_names.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/splash/presentation/pages/splash_page.dart'; // Assuming you have a SplashPage
+// import 'features/signup/presentation/pages/signup_page.dart'; // Uncomment if you have a SignupPage
+// import 'features/home/presentation/pages/home_page.dart';     // Uncomment if you have a HomePage
 
 class App extends StatelessWidget {
   final AuthRepository authRepository;
-  
+
   // Create a single navigator key at the class level
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -33,11 +36,12 @@ class App extends StatelessWidget {
         initialRoute: RouteNames.splash,
         routes: {
           RouteNames.login: (context) => LoginPage(),
-          // Add other routes as needed:
-          // RouteNames.splash: (context) => const SplashPage(),
-          // RouteNames.signup: (context) => SignupPage(),
-          // RouteNames.home: (context) => const HomePage(),
+          RouteNames.splash: (context) => const SplashPage(), // Added SplashPage route
+          // RouteNames.signup: (context) => SignupPage(), // Uncomment if you have SignupPage
+          // RouteNames.home: (context) => const HomePage(),   // Uncomment if you have HomePage
         },
+        // You can also define a home property if '/' should be a specific page
+        // home: const SplashScreen(),
       ),
     );
   }
