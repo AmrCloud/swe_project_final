@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       try {
         final newToken = await _authService.loginWithToken(token);
         await _saveToken(newToken);
-        Navigator.pushReplacementNamed(context, RouteNames.home);
+        Navigator.pushReplacementNamed(context, RouteNames.bottomNavigation);
       } catch (e) {
         // Token expired or invalid - proceed to normal login
         await prefs.remove('auth_token');

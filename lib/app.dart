@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:sugarsense/core/constants/app_constants.dart';
 import 'package:sugarsense/core/constants/route_names.dart';
+import 'package:sugarsense/core/presentation/main_wrapper.dart';
 import 'package:sugarsense/core/services/calorie_service.dart';
 import 'package:sugarsense/features/auth/domain/repositories/auth_repository.dart';
 import 'package:sugarsense/features/auth/presentation/bloc/auth_bloc.dart';
@@ -24,35 +26,38 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider.value(value: authRepository),
-        RepositoryProvider.value(value: calorieService),
-      ],
-      child: MultiBlocProvider(
+    return ChangeNotifierProvider.value(
+      value: calorieService,
+      child: MultiRepositoryProvider(
         providers: [
-          BlocProvider(
-            create: (context) => AuthBloc(
-              authRepository: authRepository,
-            ), // Removed AppStarted event
-          ),
+          RepositoryProvider.value(value: authRepository),
         ],
-        child: MaterialApp(
-          navigatorKey: navigatorKey,
-          title: AppConstants.appName,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            fontFamily: AppConstants.fontFamily,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => AuthBloc(
+                authRepository: authRepository,
+              ),
+            ),
+          ],
+          child: MaterialApp(
+            navigatorKey: navigatorKey,
+            title: AppConstants.appName,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              fontFamily: AppConstants.fontFamily,
+            ),
+            initialRoute: RouteNames.splash,
+            routes: {
+              RouteNames.splash: (context) => const SplashPage(),
+              RouteNames.login: (context) => LoginPage(),
+              RouteNames.signup: (context) => RegisterPage(),
+              RouteNames.home: (context) => const HomePage(),
+              RouteNames.logs: (context) => const Logs(),
+              RouteNames.bottomNavigation: (context) => MainWrapper(),
+            },
+            debugShowCheckedModeBanner: false,
           ),
-          initialRoute: RouteNames.splash,
-          routes: {
-            RouteNames.splash: (context) => const SplashPage(),
-            RouteNames.login: (context) => LoginPage(),
-            RouteNames.signup: (context) => RegisterPage(),
-            RouteNames.home: (context) => const HomePage(),
-            RouteNames.logs: (context) => const Logs(),
-          },
-          debugShowCheckedModeBanner: false,
         ),
       ),
     );
