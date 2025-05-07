@@ -1,54 +1,97 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/auth_bloc.dart';
-import '../../../../core/widgets/custom_button.dart';
-import '../../../../core/widgets/custom_textfield.dart';
+import 'package:http/http.dart' as http;
+import 'package:sugarsense/core/constants/app_constants.dart';
+import 'package:sugarsense/core/constants/route_names.dart';
+import 'package:sugarsense/core/services/auth_service.dart';
 
-class LoginPage extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
-  LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+  final AuthService _authService = AuthService();
+
+Future<void> _login() async {
+  if (!_formKey.currentState!.validate()) return;
+
+  setState(() => _isLoading = true);
+
+  try {
+    await _authService.login(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+    Navigator.pushReplacementNamed(context, RouteNames.home);
+  } catch (e) {
+    final errorMessage = _parseError(e);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: Duration(seconds: 5), // Longer to read details
+      ),
+    );
+    print('🛑 Full error details for debugging:');
+    print(e.toString());
+  } finally {
+    setState(() => _isLoading = false);
+  }
+}
+
+String _parseError(dynamic error) {
+  if (error is SocketException) {
+    return 'Network error: Server unreachable. Check:'
+        '\n1. Is your backend running?'
+        '\n2. Is the URL correct? (${AppConstants.apiBaseUrl})'
+        '\n3. Are you connected to the internet?';
+  } else if (error is http.ClientException) {
+    return 'Connection failed: ${error.message}';
+  } else if (error is FormatException) {
+    return 'Invalid server response: ${error.message}';
+  } else {
+    return error.toString();
+  }
+}
 
   @override
   Widget build(BuildContext context) {
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomTextField(
-              controller: emailController,
-              label: 'Email',
-              hint: 'Enter your email',
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: passwordController,
-              label: 'Password',
-              hint: 'Enter your password',
-              obscureText: true,
-            ),
-            const SizedBox(height: 24),
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                return CustomButton(
-                  text: 'Login',
-                  onPressed: () {
-                    authBloc.add(LoginEvent(
-                      email: emailController.text,
-                      password: passwordController.text,
-                    ));
-                  },
-                  isLoading: state is AuthLoading,
-                );
-              },
-            ),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Email is required' : null,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: (value) =>
+                    value!.isEmpty ? 'Password is required' : null,
+              ),
+              SizedBox(height: 20),
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _login,
+                      child: Text('Login'),
+                    ),
+            ],
+          ),
         ),
       ),
     );
