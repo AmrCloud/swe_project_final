@@ -44,8 +44,7 @@ class App extends StatelessWidget {
             navigatorKey: navigatorKey,
             title: AppConstants.appName,
             theme: ThemeData(
-              primarySwatch: Colors.blue,
-              fontFamily: AppConstants.fontFamily,
+              
             ),
             initialRoute: RouteNames.splash,
             routes: {

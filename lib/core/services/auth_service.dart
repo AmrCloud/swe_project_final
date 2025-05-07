@@ -12,7 +12,9 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['token'];
+      final token = jsonDecode(response.body)['token'];
+      await _saveToken(token);
+      return token;
     } else {
       throw Exception('Login failed: ${response.statusCode}');
     }
@@ -26,15 +28,17 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['token'];
+      final newToken = jsonDecode(response.body)['token'];
+      await _saveToken(newToken);
+      return newToken;
     } else {
+      await _clearToken(); // Clear invalid token
       throw Exception('Token login failed: ${response.statusCode}');
     }
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
+    await _clearToken();
   }
 
   Future<String> register({
@@ -66,5 +70,25 @@ class AuthService {
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
+  }
+
+  Future<bool> isLoggedIn() async {
+    final token = await getToken();
+    if (token == null || token.isEmpty) return false;
+    
+    // Optional: Add token validation logic here
+    // For example, check expiration if JWT contains it
+    return true;
+  }
+
+  // Private helper methods
+  Future<void> _saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_token', token);
+  }
+
+  Future<void> _clearToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
   }
 }

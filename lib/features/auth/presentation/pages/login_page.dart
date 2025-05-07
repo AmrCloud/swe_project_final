@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sugarsense/core/constants/app_constants.dart';
+import 'package:sugarsense/core/constants/app_colors.dart'; // Import your AppColors
 import 'package:sugarsense/core/constants/route_names.dart';
 import 'package:sugarsense/core/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         await _saveToken(token);
       }
 
-      Navigator.pushReplacementNamed(context, RouteNames.home);
+      Navigator.pushReplacementNamed(context, RouteNames.bottomNavigation);
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -75,63 +75,142 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body:
-          _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(labelText: 'Email'),
-                        validator:
-                            (value) => value!.isEmpty ? 'Required' : null,
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(labelText: 'Password'),
-                        obscureText: true,
-                        validator:
-                            (value) => value!.isEmpty ? 'Required' : null,
-                      ),
-                      CheckboxListTile(
-                        title: Text('Remember me'),
-                        value: _rememberMe,
-                        onChanged:
-                            (value) => setState(() => _rememberMe = value!),
-                        controlAffinity: ListTileControlAffinity.leading,
-                      ),
-
-                      Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: _login,
-                            child: Text('Login'),
+      backgroundColor: AppColors.surface(context),
+      body: SafeArea(
+        child:
+            _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment
+                              .stretch, // Use stretch for better layout
+                      mainAxisAlignment:
+                          MainAxisAlignment
+                              .center, // Center the content vertically
+                      children: [
+                        //Use expanded and Flexible to control the spacing.
+                        Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textSecondary(context),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Don't have an account?"),
-                              TextButton(
-                                onPressed:
-                                    () => Navigator.pushNamed(
-                                      context,
-                                      RouteNames.signup,
-                                    ),
-                                child: Text('Sign up'),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(
+                                color: AppColors.onPrimary(context),
                               ),
-                            ],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(
+                                color: AppColors.secondary(context),
+                                width: 2.0,
+                              ),
+                            ),
+                            prefixIcon: const Icon(Icons.email),
                           ),
-                        ],
-                      ),
-                    ],
+                          validator:
+                              (value) => value!.isEmpty ? 'Required' : null,
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(
+                                color: AppColors.onPrimary(context),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(
+                                color: AppColors.secondary(context),
+                                width: 2.0,
+                              ),
+                            ),
+                            prefixIcon: const Icon(Icons.lock),
+                          ),
+                          obscureText: true,
+                          validator:
+                              (value) => value!.isEmpty ? 'Required' : null,
+                        ),
+                        const SizedBox(height: 20),
+                        CheckboxListTile(
+                          title: Text(
+                            'Remember me',
+                            style: TextStyle(
+                              color: AppColors.textPrimary(context),
+                            ),
+                          ),
+                          value: _rememberMe,
+                          onChanged:
+                              (value) => setState(() => _rememberMe = value!),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          activeColor: AppColors.secondary(context),
+                        ),
+                        const SizedBox(height: 30),
+                        ElevatedButton(
+                          onPressed: _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.textPrimary(context),
+                            foregroundColor: AppColors.surface(context),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 15,
+                            ), // Increased padding
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account?",
+                              style: TextStyle(
+                                color: AppColors.textPrimary(context),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed:
+                                  () => Navigator.pushNamed(
+                                    context,
+                                    RouteNames.signup,
+                                  ),
+                              child: Text(
+                                'Sign up',
+                                style: TextStyle(
+                                  color: AppColors.secondary(context),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+      ),
     );
   }
 }

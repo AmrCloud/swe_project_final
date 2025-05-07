@@ -1,15 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sugarsense/core/services/calorie_service.dart';
+import 'package:sugarsense/core/constants/app_colors.dart'; // Import AppColors
 
 class CalorieTracker extends StatefulWidget {
   final Duration refreshInterval;
   final Function()? onRefresh; // Optional callback for parent
 
   const CalorieTracker({
-    super.key, 
+    super.key,
     this.refreshInterval = const Duration(minutes: 5),
     this.onRefresh,
   });
@@ -45,14 +45,14 @@ class _CalorieTrackerState extends State<CalorieTracker> {
     setState(() {
       _targetCalories = newCalories;
     });
-    
+
     // Animate the counter
     const duration = Duration(milliseconds: 500);
     final steps = (_targetCalories - _currentCalories).abs();
-    
+
     if (steps > 0) {
       final stepDuration = duration ~/ steps;
-      
+
       Timer.periodic(stepDuration, (timer) {
         if (_currentCalories < _targetCalories) {
           setState(() => _currentCalories++);
@@ -79,7 +79,10 @@ class _CalorieTrackerState extends State<CalorieTracker> {
 
   Future<int> _fetchCalories({bool showLoading = true}) async {
     try {
-      final calorieService = Provider.of<CalorieService>(context, listen: false);
+      final calorieService = Provider.of<CalorieService>(
+        context,
+        listen: false,
+      );
       final calories = await calorieService.getDailyCalories();
       _updateCalories(calories);
       widget.onRefresh?.call();
@@ -87,7 +90,15 @@ class _CalorieTrackerState extends State<CalorieTracker> {
     } catch (e) {
       if (showLoading) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+          SnackBar(
+            content: Text(
+              'Error: ${e.toString()}',
+              style: TextStyle(
+                color: AppColors.onError(context),
+              ), // Use error color from AppColors
+            ),
+            backgroundColor: Colors.red.shade100,
+          ),
         );
       }
       rethrow;
@@ -104,6 +115,10 @@ class _CalorieTrackerState extends State<CalorieTracker> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
+      color: AppColors.surface(context), // Use surface color from AppColors
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // Rounded corners for card
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -113,12 +128,25 @@ class _CalorieTrackerState extends State<CalorieTracker> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Daily Calories',
-                  style: Theme.of(context).textTheme.titleLarge,
+                Expanded(
+                  child: Text(
+                    'Daily Calories',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary(
+                        context,
+                      ), // Use text color from AppColors
+                    ),
+                  ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.refresh),
+                  icon: Icon(
+                    Icons.refresh,
+                    color: AppColors.secondary(
+                      context,
+                    ), // Use secondary color from AppColors
+                  ),
                   onPressed: _loadData,
                   tooltip: 'Refresh',
                   iconSize: 20,
@@ -132,20 +160,30 @@ class _CalorieTrackerState extends State<CalorieTracker> {
                 if (snapshot.hasError) {
                   return Text(
                     'Error loading data',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
+                    style: TextStyle(
+                      color: AppColors.onError(
+                        context,
+                      ), // Use error color from AppColors
+                      fontStyle: FontStyle.italic,
+                    ),
                   );
                 }
 
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) {
+                    // Add a fade-in animation
+                    return FadeTransition(opacity: animation, child: child);
+                  },
                   child: Text(
                     '$_currentCalories',
                     key: ValueKey<int>(_currentCalories),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
+                      color: AppColors.textSecondary(
+                        context,
+                      ), // Use secondary text color from AppColors
                     ),
                   ),
                 );
@@ -154,7 +192,10 @@ class _CalorieTrackerState extends State<CalorieTracker> {
             const SizedBox(height: 8),
             Text(
               'Last updated: ${TimeOfDay.now().format(context)}',
-              style: Theme.of(context).textTheme.bodySmall,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey, // Keep standard grey for this
+              ),
             ),
           ],
         ),

@@ -10,10 +10,7 @@ class MainWrapper extends StatefulWidget {
 class __MainWrapperState extends State<MainWrapper> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    HomePage(),
-    Logs(),
-  ];
+  final List<Widget> _pages = [HomePage(), Logs()];
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +20,7 @@ class __MainWrapperState extends State<MainWrapper> {
         currentIndex: _currentIndex,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.food_bank), label: 'Logs'),
         ],
         onTap: (index) => setState(() => _currentIndex = index),
       ),
