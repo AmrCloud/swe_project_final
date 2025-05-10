@@ -5,6 +5,8 @@ import 'package:sugarsense/core/services/consumed_food_service.dart';
 import 'package:sugarsense/core/services/food_service.dart';
 
 class FoodTrackerWidget extends StatefulWidget {
+  const FoodTrackerWidget({super.key});
+
   @override
   _FoodTrackerWidgetState createState() => _FoodTrackerWidgetState();
 }

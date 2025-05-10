@@ -31,7 +31,7 @@ void main() async {
       ],
       child: App(
         authRepository: authRepository,
-        calorieService: calorieService, // Pass services down
+        calorieService: calorieService, 
       ),
     ),
   );

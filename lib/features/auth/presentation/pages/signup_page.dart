@@ -4,6 +4,8 @@ import 'package:sugarsense/core/services/auth_service.dart';
 import 'package:sugarsense/core/constants/route_names.dart'; // Import your AppColors
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }

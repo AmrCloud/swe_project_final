@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sugarsense/core/constants/app_constants.dart';
 import 'package:sugarsense/core/constants/route_names.dart';
 import 'package:sugarsense/core/presentation/main_wrapper.dart';
+import 'package:sugarsense/core/services/app_theme.dart';
 import 'package:sugarsense/core/services/calorie_service.dart';
 import 'package:sugarsense/features/auth/domain/repositories/auth_repository.dart';
 import 'package:sugarsense/features/auth/presentation/bloc/auth_bloc.dart';
@@ -19,10 +20,10 @@ class App extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
   App({
-    Key? key,
+    super.key,
     required this.authRepository,
     required this.calorieService,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +44,8 @@ class App extends StatelessWidget {
           child: MaterialApp(
             navigatorKey: navigatorKey,
             title: AppConstants.appName,
-            theme: ThemeData(
-              
-            ),
+            theme:lightTheme,
+            darkTheme: darkTheme,
             initialRoute: RouteNames.splash,
             routes: {
               RouteNames.splash: (context) => const SplashPage(),

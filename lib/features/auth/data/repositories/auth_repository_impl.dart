@@ -13,8 +13,8 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<User?> getCurrentUser() async {
     try {
-      final email = await localStorage.getString('email');
-      final name = await localStorage.getString('name');
+      final email = localStorage.getString('email');
+      final name = localStorage.getString('name');
       
       if (email != null) {
         // Convert UserModel to User entity

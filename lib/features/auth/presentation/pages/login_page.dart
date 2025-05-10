@@ -5,6 +5,8 @@ import 'package:sugarsense/core/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -85,16 +87,11 @@ class _LoginPageState extends State<LoginPage> {
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment
-                              .stretch, // Use stretch for better layout
-                      mainAxisAlignment:
-                          MainAxisAlignment
-                              .center, // Center the content vertically
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        //Use expanded and Flexible to control the spacing.
                         Text(
-                          "Login",
+                          "Welcome Back",
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
@@ -102,83 +99,100 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 30),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                color: AppColors.onPrimary(context),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                color: AppColors.secondary(context),
-                                width: 2.0,
-                              ),
-                            ),
-                            prefixIcon: const Icon(Icons.email),
+
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: EdgeInsets.all(20),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppColors.primary(context),
                           ),
-                          validator:
-                              (value) => value!.isEmpty ? 'Required' : null,
-                        ),
-                        const SizedBox(height: 20),
-                        TextFormField(
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                color: AppColors.onPrimary(context),
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _emailController,
+                                decoration: InputDecoration(
+                                  labelText: 'Email',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                      color: AppColors.onPrimary(context),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                      color: AppColors.secondary(context),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  prefixIcon: const Icon(Icons.email),
+                                ),
+                                validator:
+                                    (value) =>
+                                        value!.isEmpty ? 'Required' : null,
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                color: AppColors.secondary(context),
-                                width: 2.0,
+                              const SizedBox(height: 20),
+                              TextFormField(
+                                controller: _passwordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                      color: AppColors.onPrimary(context),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                      color: AppColors.secondary(context),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  prefixIcon: const Icon(Icons.lock),
+                                ),
+                                obscureText: true,
+                                validator:
+                                    (value) =>
+                                        value!.isEmpty ? 'Required' : null,
                               ),
-                            ),
-                            prefixIcon: const Icon(Icons.lock),
-                          ),
-                          obscureText: true,
-                          validator:
-                              (value) => value!.isEmpty ? 'Required' : null,
-                        ),
-                        const SizedBox(height: 20),
-                        CheckboxListTile(
-                          title: Text(
-                            'Remember me',
-                            style: TextStyle(
-                              color: AppColors.textPrimary(context),
-                            ),
-                          ),
-                          value: _rememberMe,
-                          onChanged:
-                              (value) => setState(() => _rememberMe = value!),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          activeColor: AppColors.secondary(context),
-                        ),
-                        const SizedBox(height: 30),
-                        ElevatedButton(
-                          onPressed: _login,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.textPrimary(context),
-                            foregroundColor: AppColors.surface(context),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 15,
-                            ), // Increased padding
-                          ),
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(fontSize: 18),
+                              const SizedBox(height: 10),
+                              CheckboxListTile(
+                                title: Text(
+                                  'Remember me',
+                                  style: TextStyle(
+                                    color: AppColors.textPrimary(context),
+                                  ),
+                                ),
+                                value: _rememberMe,
+                                onChanged:
+                                    (value) =>
+                                        setState(() => _rememberMe = value!),
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                activeColor: AppColors.secondary(context),
+                              ),
+                              const SizedBox(height: 10),
+                              ElevatedButton(
+                                onPressed: _login,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.secondary(context),
+                                  foregroundColor: AppColors.surface(context),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 15,
+                                  ), // Increased padding
+                                ),
+                                child: const Text(
+                                  'Login',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 20),

@@ -3,6 +3,8 @@ import 'package:sugarsense/features/home/presentation/pages/home_page.dart';
 import 'package:sugarsense/features/logs/presentation/pages/logs.dart';
 
 class MainWrapper extends StatefulWidget {
+  const MainWrapper({super.key});
+
   @override
   __MainWrapperState createState() => __MainWrapperState();
 }
